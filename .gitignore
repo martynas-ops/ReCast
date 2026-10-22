@@ -38,6 +38,7 @@ icassp2027_revision/experiments/learned_exact_age.json
 icassp2027_revision/experiments/learned_budget_curve.json
 icassp2027_revision/experiments/smoke_result.json
 icassp2027_revision/figures/
+outputs/
 
 # Local credentials and editor files
 .env
