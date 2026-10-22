@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local datasets and external baselines
+data/
+dataset/
+icassp2027_revision/dataset_views/opv2v_internal/train/
+icassp2027_revision/dataset_views/opv2v_internal/validate/
+icassp2027_revision/dataset_views/opv2v_internal/test/
+baselines/code/OpenCOOD/
+
+# Checkpoints and generated training/evaluation artifacts
+*.pth
+*.pt
+*.ckpt
+*.engine
+*.onnx
+*.pcd
+*.bin
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.log
+icassp2027_revision/experiments/point_pillar_run/
+icassp2027_revision/experiments/learned_policy_results.json
+icassp2027_revision/experiments/learned_exact_age.json
+icassp2027_revision/experiments/learned_budget_curve.json
+icassp2027_revision/experiments/smoke_result.json
+icassp2027_revision/figures/
+
+# Local credentials and editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
