@@ -4,17 +4,6 @@ Code release for **ReCAST: Receiver-Cache-Aware Selective Refresh for Bandwidth-
 
 ReCAST maintains a coordinate-consistent cache of collaborative bird's-eye-view (BEV) features. At each frame, cached features and their metadata are warped into the current ego frame. The receiver-cache residual then ranks regions for refresh under a communication budget. The implementation also includes periodic, sender-side delta, random-region, and oldest-first controls.
 
-## Repository contents
-
-- `icassp2027_revision/cache/coordinate_cache.py`: pose-aware feature and metadata transport, regional scoring, and budgeted refresh.
-- `icassp2027_revision/experiments/train_point_pillar.py`: PointPillars training on an OPV2V scene split.
-- `icassp2027_revision/experiments/evaluate_learned_direct.py`: Full, ego-only, periodic, Direct, Tx-Delta, Random-B, Oldest-first, and factorial mechanism evaluations.
-- `icassp2027_revision/experiments/evaluate_exact_age.py`: common-frame exact-cache-age evaluation.
-- `icassp2027_revision/experiments/evaluate_budget_curve.py`: Direct and periodic budget sweeps.
-- `icassp2027_revision/experiments/point_pillar_internal.yaml`: training and evaluation configuration.
-- `icassp2027_revision/dataset_views/opv2v_internal/split.json`: scene names for the internal 8/2/3 train, validation, and held-out split.
-- `scripts/prepare_opv2v_split.py`: makes a local symlink view from an OpenCOOD-format OPV2V extraction.
-
 The detector checkpoint and datasets are not included. Scripts expect OpenCOOD at `baselines/code/OpenCOOD` and the dataset view at `icassp2027_revision/dataset_views/opv2v_internal`. Generated checkpoints, caches, predictions, and logs are ignored by Git.
 
 ## Setup
@@ -29,11 +18,11 @@ python3 scripts/prepare_opv2v_split.py \
   --destination icassp2027_revision/dataset_views/opv2v_internal
 ```
 
-The helper creates symlinks only and refuses to replace existing scene paths. This is a scene-disjoint internal split for feasibility evaluation, not the official OPV2V benchmark split.
+The helper creates symlinks only and refuses to replace existing scene paths. This is an internal feasibility split, not the official OPV2V benchmark split.
 
-## Experimental setup
+## Experiments
 
-We use OPV2V, V2XSet, and the V2X-Seq Sequential Perception Dataset (SPD). PointPillars is trained on the internal OPV2V split; ReCAST is evaluated on its held-out scenes and transferred to V2XSet and SPD without dataset-specific retraining. Experiments cover accuracy versus communication budget, cache-age degradation, refresh-policy comparisons under a shared backbone, and component ablations. Public-method results use their released checkpoints, while controlled comparisons use the same detector and evaluation protocol.
+We use OPV2V, V2XSet, and the V2X-Seq Sequential Perception Dataset (SPD). PointPillars is trained on a scene-disjoint internal OPV2V split. ReCAST is evaluated on held-out OPV2V scenes and transferred to V2XSet and SPD without dataset-specific training. Experiments cover accuracy versus communication budget, cache-age degradation, refresh-policy comparisons under a shared backbone, and component ablations. Public-method results use released checkpoints; controlled comparisons use the same detector.
 
 ## Run
 
@@ -62,6 +51,36 @@ python3 icassp2027_revision/experiments/evaluate_learned_direct.py \
   --budget 0.10
 ```
 
+Evaluate zero-shot transfer on V2XSet. First place its OpenCOOD-format test scenes under `icassp2027_revision/dataset_views/v2xset/test`, then use the same OPV2V-trained checkpoint:
+
+```bash
+python3 icassp2027_revision/experiments/evaluate_learned_direct.py \
+  --config icassp2027_revision/experiments/point_pillar_v2xset_zero_shot.yaml \
+  --checkpoint icassp2027_revision/experiments/point_pillar_run/best.pth \
+  --dataset-dir icassp2027_revision/dataset_views/v2xset/test \
+  --dataset-label v2xset_zero_shot \
+  --budget 0.10
+```
+
+Use an OpenCOOD-format V2XSet tree with a `test` directory containing scene folders. This is an evaluation-only zero-shot transfer; no V2XSet training is performed.
+
+For V2X-Seq SPD, convert the official sequence into the OpenCOOD-compatible layout, then evaluate with the OPV2V checkpoint:
+
+```bash
+python3 icassp2027_revision/experiments/adapt_spd_opencood.py \
+  --spd-root /path/to/V2X-Seq-SPD \
+  --output icassp2027_revision/dataset_views/spd_opencood
+
+python3 icassp2027_revision/experiments/evaluate_learned_direct.py \
+  --config icassp2027_revision/experiments/point_pillar_spd_zero_shot.yaml \
+  --checkpoint icassp2027_revision/experiments/point_pillar_run/best.pth \
+  --dataset-dir icassp2027_revision/dataset_views/spd_opencood \
+  --dataset-label v2xseq_spd_zero_shot \
+  --budget 0.10
+```
+
+The adapter uses the vehicle and infrastructure LiDAR streams and cooperative labels to produce the paired OpenCOOD-style sequence. This is also zero-shot evaluation.
+
 Run an exact-age study or a multi-budget sweep with `evaluate_exact_age.py` or `evaluate_budget_curve.py`. Both accept explicit dataset, checkpoint, config, and output paths. Use the same split, checkpoint, communication range, and budget accounting when comparing policies. The two plotting scripts accept the resulting JSON files with `--age-json`, `--budget-json`, and `--output-dir`.
 
 The cache-only tests can be run from the repository root with:
@@ -71,10 +90,6 @@ python3 -m unittest icassp2027_revision.cache.test_coordinate_cache
 ```
 
 The figure scripts consume JSON files generated by the corresponding evaluators; their raw outputs and checkpoints are intentionally local artifacts.
-
-## Scope
-
-Public-checkpoint AP values are method-specific and should be interpreted within their stated evaluation protocols. The cache module provides geometric transport, residual scoring, regional age and validity tracking, and budgeted selection. Motion-derived expiration and keyframe fallback are described separately in the paper and are not implemented by the cache module alone.
 
 ## Data and third-party software
 

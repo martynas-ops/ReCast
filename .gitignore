@@ -13,6 +13,10 @@ dataset/
 icassp2027_revision/dataset_views/opv2v_internal/train/
 icassp2027_revision/dataset_views/opv2v_internal/validate/
 icassp2027_revision/dataset_views/opv2v_internal/test/
+icassp2027_revision/dataset_views/v2xset/
+icassp2027_revision/dataset_views/spd_opencood/
+icassp2027_revision/dataset_views/v2xset/
+icassp2027_revision/dataset_views/spd_opencood/
 baselines/code/OpenCOOD/
 
 # Checkpoints and generated training/evaluation artifacts
