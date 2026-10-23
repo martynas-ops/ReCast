@@ -36,6 +36,7 @@ python3 icassp2027_revision/experiments/adapt_spd_opencood.py \
 
 Run these commands from the repository root. PointPillars is trained on the OPV2V scene split; V2XSet and SPD use that checkpoint for zero-shot evaluation. Output files are saved under `outputs/`.
 
+<!--
 ### Train PointPillars
 
 ```bash
@@ -46,6 +47,7 @@ python3 icassp2027_revision/experiments/train_point_pillar.py \
 ```
 
 The selected checkpoint is `icassp2027_revision/experiments/point_pillar_run/best.pth`.
+-->
 
 ### Three-dataset evaluation
 
@@ -118,6 +120,8 @@ python3 $E/make_learned_figures_side_by_side.py \
 
 Use `evaluate_budget_curve.py` with `point_pillar_v2xset_zero_shot.yaml` or `point_pillar_spd_zero_shot.yaml` and the corresponding dataset directory to sweep budgets on the other two datasets.
 
+<!--
 ## Dependencies
 
 Datasets, checkpoints, and third-party baseline code are obtained from their original sources. See [THIRD_PARTY.md](THIRD_PARTY.md).
+-->
