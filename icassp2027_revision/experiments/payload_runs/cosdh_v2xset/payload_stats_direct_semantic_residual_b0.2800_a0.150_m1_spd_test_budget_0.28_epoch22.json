@@ -1,0 +1,29 @@
+{
+  "frames": 50,
+  "ap50": 0.4686481720419431,
+  "ap70": 0.38853898464912345,
+  "feature_bytes_per_frame": 2227169.28,
+  "index_bytes_per_frame": 7457.04,
+  "payload_kb_per_frame": 2182.252265625,
+  "full_kb_per_frame": 7392.0,
+  "payload_percent": 29.521810952719154,
+  "method": "Direct",
+  "score_mode": "semantic_residual",
+  "budget": 0.28,
+  "age_weight": 0.15,
+  "max_age": 1,
+  "residual_weight": 0.35,
+  "level_weights": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "regions": [
+    4,
+    2,
+    1
+  ],
+  "training": "none",
+  "start_frame": 0,
+  "test_dir": "/workspace/icassp2027_revision/dataset_views/spd_temporal/test"
+}

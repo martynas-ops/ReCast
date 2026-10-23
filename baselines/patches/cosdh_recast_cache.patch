@@ -1,0 +1,225 @@
+diff --git a/opencood/models/sub_modules/direct_temporal_cache.py b/opencood/models/sub_modules/direct_temporal_cache.py
+new file mode 100644
+index 0000000..bb2b7b6
+--- /dev/null
++++ b/opencood/models/sub_modules/direct_temporal_cache.py
+@@ -0,0 +1,219 @@
++"""Training-free, coordinate-consistent regional cache for Direct inference."""
++
++from __future__ import annotations
++
++import math
++
++import torch
++import torch.nn.functional as F
++
++
++def _pose_matrix(pose, *, device, dtype):
++    """Convert OpenCOOD [x,y,z,roll,yaw,pitch] pose to local-to-world SE(2)."""
++    yaw = torch.as_tensor(float(pose[4]) * math.pi / 180.0,
++                          device=device, dtype=dtype)
++    c, s = torch.cos(yaw), torch.sin(yaw)
++    out = torch.eye(3, device=device, dtype=dtype)
++    out[0, 0], out[0, 1], out[0, 2] = c, -s, float(pose[0])
++    out[1, 0], out[1, 1], out[1, 2] = s, c, float(pose[1])
++    return out
++
++
++def _warp(field, source_pose, target_pose, x_range, y_range, mode):
++    _, height, width = field.shape
++    xs = torch.linspace(x_range[0] + (x_range[1] - x_range[0]) / (2 * width),
++                        x_range[1] - (x_range[1] - x_range[0]) / (2 * width),
++                        width, device=field.device, dtype=field.dtype)
++    ys = torch.linspace(y_range[0] + (y_range[1] - y_range[0]) / (2 * height),
++                        y_range[1] - (y_range[1] - y_range[0]) / (2 * height),
++                        height, device=field.device, dtype=field.dtype)
++    yy, xx = torch.meshgrid(ys, xs, indexing="ij")
++    points = torch.stack((xx.flatten(), yy.flatten(), torch.ones_like(xx).flatten()))
++    source_points = torch.linalg.inv(source_pose) @ target_pose @ points
++    nx = 2.0 * (source_points[0].reshape(height, width) - x_range[0]) / (x_range[1] - x_range[0]) - 1.0
++    ny = 2.0 * (source_points[1].reshape(height, width) - y_range[0]) / (y_range[1] - y_range[0]) - 1.0
++    grid = torch.stack((nx, ny), dim=-1).unsqueeze(0)
++    return F.grid_sample(field.unsqueeze(0), grid, mode=mode,
++                         padding_mode="zeros", align_corners=False).squeeze(0)
++
++
++def _region_mean(value, region):
++    height, width = value.shape[-2:]
++    value = F.pad(value, (0, (-width) % region, 0, (-height) % region))
++    return F.avg_pool2d(value, region, region).squeeze(0)
++
++
++def _expand(mask, height, width, region):
++    return (mask.repeat_interleave(region, 0)
++            .repeat_interleave(region, 1)[:height, :width].unsqueeze(0))
++
++
++def _smooth_confidence(value):
++    coords = torch.arange(-2, 3, device=value.device, dtype=value.dtype)
++    kernel_1d = torch.exp(-0.5 * coords.square())
++    kernel_1d = kernel_1d / kernel_1d.sum()
++    kernel = torch.outer(kernel_1d, kernel_1d).view(1, 1, 5, 5)
++    return F.conv2d(value.unsqueeze(0), kernel, padding=2).squeeze(0)
++
++
++class DirectTemporalCache:
++    """One collaborator/scale cache; all stored tensors use the latest ego frame."""
++
++    def __init__(self, x_range, y_range, region, score_mode="hybrid",
++                 age_weight=0.15, max_age=8, residual_weight=0.35,
++                 scorer=None):
++        self.x_range = tuple(x_range)
++        self.y_range = tuple(y_range)
++        self.region = int(region)
++        self.score_mode = score_mode
++        self.age_weight = float(age_weight)
++        self.max_age = int(max_age)
++        self.residual_weight = float(residual_weight)
++        self.scorer = scorer
++        self.reset()
++
++    def reset(self):
++        self.feature = None
++        self.valid = None
++        self.age = None
++        self.pose = None
++        self.last_descriptors = None
++
++    def _score(self, fresh, cached):
++        delta = (fresh - cached).abs()
++        raw = delta.mean(dim=0, keepdim=True)
++        if self.score_mode == "residual":
++            return raw
++        scale = fresh.abs().mean(dim=0, keepdim=True) + cached.abs().mean(dim=0, keepdim=True)
++        normalized = (delta / (fresh.abs() + cached.abs() + 1e-3)).mean(dim=0, keepdim=True)
++        if self.score_mode == "normalized":
++            return normalized
++        if self.score_mode == "saliency":
++            return raw * torch.sqrt(scale + 1e-3)
++        if self.score_mode == "hybrid":
++            # Suppress empty-background interpolation noise while retaining
++            # large absolute changes on object-bearing cells.
++            return raw * torch.sqrt(scale + 1e-3) * (0.5 + normalized)
++        if self.score_mode in {"semantic", "semantic_residual", "gsr_semantic",
++                               "gsr_semantic_residual", "gsr_residual",
++                               "smooth_semantic", "smooth_gsr_semantic",
++                               "gap_residual", "learned"}:
++            return raw
++        raise ValueError("unknown Direct score mode: %s" % self.score_mode)
++
++    def step(self, fresh, ego_pose, budget, semantic_map=None, request_map=None):
++        _, height, width = fresh.shape
++        pose = _pose_matrix(ego_pose, device=fresh.device, dtype=fresh.dtype)
++        rows = (height + self.region - 1) // self.region
++        cols = (width + self.region - 1) // self.region
++        if self.feature is None:
++            self.feature = fresh.detach().clone()
++            self.valid = torch.ones((1, height, width), device=fresh.device, dtype=fresh.dtype)
++            self.age = torch.zeros_like(self.valid)
++            self.pose = pose
++            self.last_descriptors = None
++            return self.feature, rows * cols, rows * cols
++
++        self.feature = _warp(self.feature, self.pose, pose, self.x_range, self.y_range, "bilinear")
++        self.valid = _warp(self.valid, self.pose, pose, self.x_range, self.y_range, "nearest")
++        self.age = _warp(self.age, self.pose, pose, self.x_range, self.y_range, "nearest")
++        self.pose = pose
++
++        region_age = _region_mean(self.age, self.region)
++        region_valid = _region_mean(self.valid, self.region)
++        residual_score = _region_mean(self._score(fresh, self.feature), self.region)
++        if self.score_mode in {"semantic", "semantic_residual", "gsr_semantic",
++                               "gsr_semantic_residual", "gsr_residual",
++                               "smooth_semantic", "smooth_gsr_semantic",
++                               "gap_residual", "learned"}:
++            if semantic_map is None:
++                raise ValueError("semantic Direct scoring requires a confidence map")
++            if self.score_mode.startswith("smooth_"):
++                semantic_map = _smooth_confidence(semantic_map)
++            semantic_score = _region_mean(semantic_map, self.region)
++            gap_score = (_region_mean(semantic_map * request_map, self.region)
++                         if request_map is not None else semantic_score)
++            request_score = (_region_mean(request_map, self.region)
++                             if request_map is not None else torch.ones_like(semantic_score))
++            descriptors = torch.stack((
++                residual_score / residual_score.amax().clamp_min(1e-6),
++                semantic_score / semantic_score.amax().clamp_min(1e-6),
++                gap_score / gap_score.amax().clamp_min(1e-6),
++                region_age / max(1, self.max_age + 1),
++                region_valid,
++                request_score,
++            ), dim=-1)
++            self.last_descriptors = descriptors.detach()
++            if self.score_mode in {"semantic", "smooth_semantic"}:
++                score = semantic_score
++            elif self.score_mode == "learned":
++                if self.scorer is None:
++                    score = semantic_score + self.residual_weight * residual_score
++                else:
++                    mean = fresh.new_tensor(self.scorer["mean"])
++                    scale = fresh.new_tensor(self.scorer["scale"]).clamp_min(1e-6)
++                    selected = descriptors[..., :mean.numel()]
++                    normalized = (selected - mean) / scale
++                    if self.scorer.get("type") == "mlp":
++                        w1 = fresh.new_tensor(self.scorer["w1"])
++                        b1 = fresh.new_tensor(self.scorer["b1"])
++                        w2 = fresh.new_tensor(self.scorer["w2"])
++                        b2 = float(self.scorer["b2"])
++                        hidden = torch.relu(normalized @ w1.T + b1)
++                        score = hidden @ w2 + b2
++                    else:
++                        weight = fresh.new_tensor(self.scorer["weight"])
++                        bias = float(self.scorer["bias"])
++                        score = (normalized * weight).sum(dim=-1) + bias
++            elif self.score_mode == "semantic_residual":
++                # Per-frame normalization makes the fixed mixture portable
++                # across feature scales and datasets without fitting.
++                r = residual_score / residual_score.amax().clamp_min(1e-6)
++                s = semantic_score / semantic_score.amax().clamp_min(1e-6)
++                score = s + self.residual_weight * r
++            elif self.score_mode == "gap_residual":
++                if request_map is None:
++                    raise ValueError("gap scoring requires ego uncertainty")
++                gap = _region_mean(semantic_map * request_map, self.region)
++                g = gap / gap.amax().clamp_min(1e-6)
++                r = residual_score / residual_score.amax().clamp_min(1e-6)
++                score = g + self.residual_weight * r
++            else:
++                if request_map is None:
++                    raise ValueError("GSR scoring requires a receiver request map")
++                request = _region_mean(request_map, self.region).clamp(0, 1)
++                gate = 0.05 + 0.95 * request
++                r = residual_score / residual_score.amax().clamp_min(1e-6)
++                s = semantic_score / semantic_score.amax().clamp_min(1e-6)
++                if self.score_mode in {"gsr_semantic", "smooth_gsr_semantic"}:
++                    score = s * gate
++                elif self.score_mode == "gsr_residual":
++                    score = r * gate
++                else:
++                    score = s * gate + self.residual_weight * r
++        else:
++            score = residual_score
++        score = score * (1.0 + self.age_weight * region_age)
++        priority = (region_valid < 0.5)
++        if self.max_age >= 0:
++            priority |= region_age >= self.max_age
++        score = score + priority.to(score.dtype) * (
++            score.max() - score.min() + 1.0)
++
++        count = score.numel()
++        keep = max(1, min(count, round(float(budget) * count)))
++        selected = torch.zeros_like(score, dtype=torch.bool)
++        selected.flatten()[torch.topk(score.flatten(), keep).indices] = True
++        cell_mask = _expand(selected, height, width, self.region)
++        self.feature = torch.where(cell_mask, fresh.detach(), self.feature)
++        self.valid = torch.where(cell_mask, torch.ones_like(self.valid), self.valid)
++        self.age = torch.where(cell_mask, torch.zeros_like(self.age), self.age + 1.0)
++        # An expired region remains available as the sender-side mirror used
++        # by residual scoring, but it must not contaminate receiver fusion.
++        # It becomes visible again only after refresh.  This is the operational
++        # meaning of the cache lifetime bound in Direct.
++        serve_mask = self.valid >= 0.5
++        if self.max_age >= 0:
++            serve_mask &= self.age <= self.max_age
++        served = self.feature * serve_mask.to(self.feature.dtype)
++        return served, int(selected.sum()), count

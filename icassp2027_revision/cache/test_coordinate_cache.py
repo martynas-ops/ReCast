@@ -6,6 +6,7 @@ import torch
 
 from icassp2027_revision.cache.coordinate_cache import (
     CoordinateConsistentRegionCache,
+    motion_bounded_lifetime,
     pose_to_matrix,
     warp_bev,
 )
@@ -84,10 +85,60 @@ def test_controlled_selection_modes() -> None:
         assert torch.isfinite(out.score).all(), mode
 
 
+def test_motion_bounded_lifetime() -> None:
+    lifetime = motion_bounded_lifetime(
+        relative_speed_mps=1.0,
+        yaw_rate_rps=0.0,
+        region_radius_m=2.0,
+        frame_interval_s=0.1,
+        max_accel_mps2=0.0,
+        pose_error_m=0.0,
+        max_drift_m=0.25,
+    )
+    assert lifetime == 2
+
+
+def test_expiration_and_keyframe_controls() -> None:
+    cache = CoordinateConsistentRegionCache(
+        (-8, 8), (-8, 8), region_hw=(4, 4), age_weight=0.0
+    )
+    pose = pose_to_matrix(0, 0, 0)
+    fresh0 = torch.zeros(2, 16, 16)
+    cache.step(fresh0, pose, timestamp=0, budget_fraction=1.0)
+
+    # Age one is still admissible when max_age=1.
+    out1 = cache.step(
+        fresh0, pose, timestamp=1, budget_fraction=0.25, max_age=1
+    )
+    assert not out1.expired_regions.any()
+
+    # Age two exceeds the lifetime and all regions become mandatory.
+    out2 = cache.step(
+        fresh0, pose, timestamp=2, budget_fraction=0.25, max_age=1,
+        keyframe_on_expiration_overflow=True,
+    )
+    assert int(out2.expired_regions.sum()) == 12
+    assert out2.keyframe_reason == "expiration_overflow"
+    assert out2.selected_regions.all()
+
+    # An abrupt receiver residual triggers a complete keyframe refresh.
+    fresh3 = torch.ones_like(fresh0)
+    out3 = cache.step(
+        fresh3, pose, timestamp=3, budget_fraction=0.25,
+        keyframe_score_threshold=0.5,
+        keyframe_ratio_threshold=0.5,
+    )
+    assert out3.keyframe
+    assert out3.keyframe_reason == "abrupt_change"
+    assert out3.selected_regions.all()
+
+
 if __name__ == "__main__":
     test_identity_warp()
     test_translation_direction()
     test_rotation_preserves_center()
     test_mixed_age_state_moves_together()
     test_controlled_selection_modes()
+    test_motion_bounded_lifetime()
+    test_expiration_and_keyframe_controls()
     print("coordinate cache tests: PASS")

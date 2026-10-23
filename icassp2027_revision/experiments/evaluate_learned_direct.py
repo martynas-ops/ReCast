@@ -33,7 +33,11 @@ import opencood.data_utils.datasets as dataset_module  # noqa: E402
 from opencood.data_utils.datasets import basedataset, build_dataset  # noqa: E402
 from opencood.tools import train_utils  # noqa: E402
 from opencood.utils import eval_utils, pcd_utils  # noqa: E402
-from coordinate_cache import CoordinateConsistentRegionCache, pose_to_matrix  # noqa: E402
+from coordinate_cache import (  # noqa: E402
+    CoordinateConsistentRegionCache,
+    motion_bounded_lifetime,
+    pose_to_matrix,
+)
 
 
 def compatible_pcd_to_np(path):
@@ -94,7 +98,7 @@ def index_context(dataset, index: int) -> tuple[int, str, list[float]]:
 
 def learned_forward(model, data, mode: str, caches, ego_pose, timestamp: int,
                     budget: float, sequence_step: int, threshold=None,
-                    score_mode="mean"):
+                    score_mode="mean", safety=None):
     processed = data["processed_lidar"]
     state = {
         "voxel_features": processed["voxel_features"],
@@ -108,6 +112,8 @@ def learned_forward(model, data, mode: str, caches, ego_pose, timestamp: int,
     ups = []
     transmitted_values = 0
     available_values = 0
+    keyframe_event = False
+    safety = safety or {}
     # Evaluate exactly one collaborator for all modes. This avoids giving Full
     # more agents than the cache policy and matches the paper's stated scope.
     n_agents = min(2, int(data["record_len"][0]))
@@ -148,7 +154,9 @@ def learned_forward(model, data, mode: str, caches, ego_pose, timestamp: int,
                 selection_rule=selection_rule,
                 selection_threshold=threshold,
                 score_mode=score_mode,
+                **safety,
             )
+            keyframe_event |= cache_out.keyframe
             served = cache_out.feature
             transmitted_values += int(cache_out.selected_regions.sum()) * (
                 caches[level].region_h * caches[level].region_w * level_x.shape[1]
@@ -181,7 +189,7 @@ def learned_forward(model, data, mode: str, caches, ego_pose, timestamp: int,
     if len(model.backbone.deblocks) > len(model.backbone.blocks):
         feature = model.backbone.deblocks[-1](feature)
     return ({"psm": model.cls_head(feature), "rm": model.reg_head(feature)},
-            transmitted_values, available_values)
+            transmitted_values, available_values, int(keyframe_event))
 
 
 def fresh_caches(age_weight: float):
@@ -194,7 +202,7 @@ def fresh_caches(age_weight: float):
 
 
 def evaluate(mode, model, dataset, loader, budget, age_weight, max_frames=0,
-             threshold=None, score_mode="mean"):
+             threshold=None, score_mode="mean", safety=None):
     stats = {iou: {"tp": [], "fp": [], "gt": 0, "score": []}
              for iou in (0.3, 0.5, 0.7)}
     caches = fresh_caches(age_weight)
@@ -202,7 +210,9 @@ def evaluate(mode, model, dataset, loader, budget, age_weight, max_frames=0,
     sequence_step = 0
     transmitted_values = 0
     available_values = 0
+    keyframe_events = 0
     per_scenario = {}
+    device = next(model.parameters()).device
     for index, batch in enumerate(loader):
         if max_frames and index >= max_frames:
             break
@@ -213,15 +223,17 @@ def evaluate(mode, model, dataset, loader, budget, age_weight, max_frames=0,
             sequence_step = 0
         ego_pose = pose_to_matrix(
             float(pose[0]), float(pose[1]), math.radians(float(pose[4])),
-            device=torch.device("cuda"),
+            device=device,
         )
-        batch = train_utils.to_device(batch, torch.device("cuda"))
-        output, tx_values, full_values = learned_forward(
+        batch = train_utils.to_device(batch, device)
+        output, tx_values, full_values, keyframe_event = learned_forward(
             model, batch["ego"], mode, caches, ego_pose,
             int(timestamp_key), budget, sequence_step, threshold, score_mode,
+            safety,
         )
         transmitted_values += tx_values
         available_values += full_values
+        keyframe_events += keyframe_event
         pred, score, gt = dataset.post_process(batch, {"ego": output})
         scenario_stat = per_scenario.setdefault(
             str(scenario),
@@ -247,6 +259,7 @@ def evaluate(mode, model, dataset, loader, budget, age_weight, max_frames=0,
     result["available_feature_values"] = available_values
     result["payload_bytes_fp16"] = 2 * transmitted_values
     result["full_reference_bytes_fp16"] = 2 * available_values
+    result["keyframe_events"] = keyframe_events
     result["per_scenario"] = {
         key: {f"ap_{int(iou * 100)}": eval_utils.calculate_ap(
             copy.deepcopy(value), iou, True
@@ -289,7 +302,47 @@ def main() -> int:
         "--seed", type=int, default=2027,
         help="region-selection seed; point preprocessing remains fixed at 2027",
     )
+    parser.add_argument("--device", choices=("auto", "cpu", "cuda"),
+                        default="auto")
+    parser.add_argument("--max-cache-age", type=int, default=0,
+                        help="mandatory regional refresh age; 0 disables it")
+    parser.add_argument("--motion-max-drift-m", type=float, default=None,
+                        help="derive max cache age from the motion bound")
+    parser.add_argument("--motion-relative-speed-mps", type=float, default=0.0)
+    parser.add_argument("--motion-yaw-rate-rps", type=float, default=0.0)
+    parser.add_argument("--motion-region-radius-m", type=float, default=2.263)
+    parser.add_argument("--motion-frame-interval-s", type=float, default=0.1)
+    parser.add_argument("--motion-max-accel-mps2", type=float, default=0.0)
+    parser.add_argument("--motion-pose-error-m", type=float, default=0.0)
+    parser.add_argument("--keyframe-score-threshold", type=float, default=None)
+    parser.add_argument("--keyframe-ratio-threshold", type=float, default=None)
+    parser.add_argument("--keyframe-pose-jump-m", type=float, default=None)
+    parser.add_argument("--keyframe-yaw-jump-deg", type=float, default=None)
+    parser.add_argument("--keyframe-on-expiration-overflow", action="store_true")
     args = parser.parse_args()
+
+    max_cache_age = args.max_cache_age or None
+    if args.motion_max_drift_m is not None:
+        max_cache_age = motion_bounded_lifetime(
+            args.motion_relative_speed_mps,
+            args.motion_yaw_rate_rps,
+            args.motion_region_radius_m,
+            args.motion_frame_interval_s,
+            args.motion_max_accel_mps2,
+            args.motion_pose_error_m,
+            args.motion_max_drift_m,
+        )
+    safety = {
+        "max_age": max_cache_age,
+        "keyframe_score_threshold": args.keyframe_score_threshold,
+        "keyframe_ratio_threshold": args.keyframe_ratio_threshold,
+        "keyframe_pose_jump_m": args.keyframe_pose_jump_m,
+        "keyframe_yaw_jump_rad": (
+            math.radians(args.keyframe_yaw_jump_deg)
+            if args.keyframe_yaw_jump_deg is not None else None
+        ),
+        "keyframe_on_expiration_overflow": args.keyframe_on_expiration_overflow,
+    }
 
     hypes = yaml_utils.load_yaml(args.config, None)
     if args.max_cav is not None:
@@ -303,7 +356,11 @@ def main() -> int:
         dataset, batch_size=1, num_workers=0, shuffle=False, drop_last=False,
         collate_fn=dataset.collate_batch_test,
     )
-    model = train_utils.create_model(hypes).cuda().eval()
+    device = torch.device(
+        "cuda" if args.device == "auto" and torch.cuda.is_available()
+        else "cpu" if args.device == "auto" else args.device
+    )
+    model = train_utils.create_model(hypes).to(device).eval()
     # Checkpoint was saved with NumPy 2, whereas the inference container uses
     # NumPy 1.24. The private import path changed, but the array pickle layout
     # used by this checkpoint remains compatible.
@@ -353,7 +410,7 @@ def main() -> int:
             torch.manual_seed(args.seed)
             results[label] = evaluate(
                 mode, model, dataset, loader, args.budget, age_weight,
-                args.max_frames, args.threshold, args.score_mode,
+                args.max_frames, args.threshold, args.score_mode, safety,
             )
             print(label, json.dumps(results[label]), flush=True)
     results["protocol"] = {
@@ -368,9 +425,11 @@ def main() -> int:
         "feature_region_m": 3.2,
         "input_seed": 2027,
         "selection_seed": args.seed,
+        "device": str(device),
         "age_weight": args.age_weight,
         "score_mode": args.score_mode,
         "threshold": args.threshold,
+        "safety_controls": safety,
     }
     Path(args.output).write_text(json.dumps(results, indent=2), encoding="utf-8")
     return 0

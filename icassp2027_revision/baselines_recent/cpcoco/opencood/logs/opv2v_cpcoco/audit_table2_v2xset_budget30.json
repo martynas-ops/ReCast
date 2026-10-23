@@ -1,0 +1,12 @@
+{
+  "frames": 48,
+  "ap50": 0.9477644224147334,
+  "ap70": 0.8334266464138872,
+  "test_dir": "icassp2027_revision/experiments/pilot_views/v2xset_one/test",
+  "max_cav": 2,
+  "payload_budget_kib": 2310.0,
+  "payload_kib_per_frame": 2310.0,
+  "total_payload_mib": 108.28125,
+  "full_kib_per_frame": 16896.0,
+  "protocol": "CPCoCo with inference-only Top-k energy mask before matching; no retraining"
+}

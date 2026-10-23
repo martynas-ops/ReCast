@@ -1,0 +1,8 @@
+{
+  "frames": 48,
+  "ap50": 0.8884195640143997,
+  "ap70": 0.6546660437577129,
+  "payload_percent": 50.648367404937744,
+  "threshold": 0.147,
+  "test_dir": "/workspace/icassp2027_revision/experiments/pilot_views/v2xset_one/test"
+}

@@ -16,6 +16,35 @@ import torch
 import torch.nn.functional as F
 
 
+def motion_bounded_lifetime(
+    relative_speed_mps: float,
+    yaw_rate_rps: float,
+    region_radius_m: float,
+    frame_interval_s: float,
+    max_accel_mps2: float,
+    pose_error_m: float,
+    max_drift_m: float,
+    *,
+    max_frames: int = 1000,
+) -> int:
+    """Return the largest cache age whose motion-error bound is admissible."""
+    if (frame_interval_s <= 0 or region_radius_m < 0
+            or max_accel_mps2 < 0 or pose_error_m < 0
+            or max_drift_m < 0 or max_frames < 0):
+        raise ValueError("invalid motion-lifetime parameters")
+    speed_term = abs(relative_speed_mps) + region_radius_m * abs(yaw_rate_rps)
+    lifetime = 0
+    for age in range(max_frames + 1):
+        elapsed = age * frame_interval_s
+        drift = (elapsed * speed_term
+                 + 0.5 * max_accel_mps2 * elapsed * elapsed
+                 + pose_error_m)
+        if drift > max_drift_m:
+            break
+        lifetime = age
+    return lifetime
+
+
 def pose_to_matrix(x: float, y: float, yaw_rad: float, *, device=None,
                    dtype=torch.float32) -> torch.Tensor:
     """Return a homogeneous SE(2) transform from local coordinates to world."""
@@ -104,6 +133,10 @@ class CacheOutput:
     age: torch.Tensor
     source_time: torch.Tensor
     valid: torch.Tensor
+    expired_regions: Optional[torch.Tensor] = None
+    keyframe: bool = False
+    keyframe_reason: Optional[str] = None
+    abrupt_change_ratio: float = 0.0
 
 
 class CoordinateConsistentRegionCache:
@@ -154,7 +187,13 @@ class CoordinateConsistentRegionCache:
              selection_mode: str = "direct",
              selection_rule: str = "topb",
              selection_threshold: Optional[float] = None,
-             score_mode: str = "mean") -> CacheOutput:
+             score_mode: str = "mean",
+             max_age: Optional[int | torch.Tensor] = None,
+             keyframe_score_threshold: Optional[float] = None,
+             keyframe_ratio_threshold: Optional[float] = None,
+             keyframe_pose_jump_m: Optional[float] = None,
+             keyframe_yaw_jump_rad: Optional[float] = None,
+             keyframe_on_expiration_overflow: bool = False) -> CacheOutput:
         if fresh.ndim != 3:
             raise ValueError("fresh must have shape [C,H,W]")
         if force_refresh is None and not 0.0 < budget_fraction <= 1.0:
@@ -186,6 +225,11 @@ class CoordinateConsistentRegionCache:
                                self.source_time, self.valid)
 
         assert self.pose_world is not None
+        previous_pose_world = self.pose_world
+        relative_pose = torch.linalg.inv(previous_pose_world) @ ego_pose_world
+        pose_jump_m = float(torch.linalg.vector_norm(relative_pose[:2, 2]))
+        pose_jump_yaw = abs(float(torch.atan2(relative_pose[1, 0],
+                                               relative_pose[0, 0])))
         if transport:
             self.feature = warp_bev(
                 self.feature, self.pose_world, ego_pose_world,
@@ -207,6 +251,9 @@ class CoordinateConsistentRegionCache:
 
         region_age = self._region_mean(self.age, self.region_h, self.region_w).squeeze(0)
         region_valid = self._region_mean(self.valid, self.region_h, self.region_w).squeeze(0)
+        receiver_residual = self._region_mean(
+            (fresh - self.feature).abs().mean(dim=0, keepdim=True),
+            self.region_h, self.region_w).squeeze(0)
         if selection_mode == "direct":
             residual = (fresh - self.feature).abs().mean(dim=0, keepdim=True)
             if score_mode == "max":
@@ -250,23 +297,80 @@ class CoordinateConsistentRegionCache:
         score = score + (region_valid < 0.5).to(score.dtype) * (score.max() + 1.0)
 
         n_regions = score.numel()
+        budget = max(1, min(n_regions, round(budget_fraction * n_regions)))
+        expired = region_valid < 0.5
+        if max_age is not None:
+            if isinstance(max_age, torch.Tensor):
+                lifetime = max_age.to(device=region_age.device,
+                                      dtype=region_age.dtype)
+                if lifetime.shape != region_age.shape:
+                    raise ValueError("max_age tensor must match the region grid")
+            else:
+                if max_age < 0:
+                    raise ValueError("max_age must be non-negative")
+                lifetime = torch.full_like(region_age, float(max_age))
+            # ``lifetime`` is the largest admissible age.  A region becomes
+            # mandatory only after that age has been exceeded.
+            expired |= (region_age + 1.0) > lifetime
+
+        abrupt_ratio = 0.0
+        if keyframe_score_threshold is not None:
+            abrupt_ratio = float(
+                (receiver_residual > keyframe_score_threshold).float().mean())
+        keyframe_reason = None
+        if (keyframe_ratio_threshold is not None
+                and keyframe_score_threshold is not None
+                and abrupt_ratio > keyframe_ratio_threshold):
+            keyframe_reason = "abrupt_change"
+        elif (keyframe_pose_jump_m is not None
+              and pose_jump_m > keyframe_pose_jump_m):
+            keyframe_reason = "translation_jump"
+        elif (keyframe_yaw_jump_rad is not None
+              and pose_jump_yaw > keyframe_yaw_jump_rad):
+            keyframe_reason = "yaw_jump"
+        elif (keyframe_on_expiration_overflow
+              and int(expired.sum()) > budget):
+            keyframe_reason = "expiration_overflow"
+
         if force_refresh is True:
             selected = torch.ones_like(score, dtype=torch.bool)
         elif force_refresh is False:
             selected = torch.zeros_like(score, dtype=torch.bool)
+        elif keyframe_reason is not None:
+            selected = torch.ones_like(score, dtype=torch.bool)
         else:
             if selection_rule == "topb":
-                budget = max(1, min(n_regions, round(budget_fraction * n_regions)))
-                selected = torch.zeros_like(score, dtype=torch.bool)
-                top = torch.topk(score.flatten(), k=budget, largest=True).indices
-                selected.flatten()[top] = True
+                if int(expired.sum()) <= budget:
+                    selected = expired.clone()
+                    remaining = budget - int(selected.sum())
+                    available_score = score.masked_fill(selected, float("-inf"))
+                else:
+                    # If mandatory updates exceed the radio budget, transmit
+                    # the most informative expired regions and keep the rest
+                    # invalid at the receiver. Enabling expiration-overflow
+                    # fallback above converts this case to a full keyframe.
+                    selected = torch.zeros_like(score, dtype=torch.bool)
+                    remaining = budget
+                    available_score = score.masked_fill(~expired, float("-inf"))
+                if remaining:
+                    top = torch.topk(
+                        available_score.flatten(), k=remaining, largest=True
+                    ).indices
+                    selected.flatten()[top] = True
             else:
                 assert selection_threshold is not None
-                selected = score >= selection_threshold
+                selected = expired | (score >= selection_threshold)
         cell_selected = _expand_regions(
             selected, height, width, self.region_h, self.region_w
         ).unsqueeze(0)
+        cell_expired = _expand_regions(
+            expired, height, width, self.region_h, self.region_w
+        ).unsqueeze(0)
 
+        # Unserved expired regions remain in the sender mirror for residual
+        # scoring, but are invalidated in the representation used for fusion.
+        self.valid = torch.where(cell_expired, torch.zeros_like(self.valid),
+                                 self.valid)
         self.feature = torch.where(cell_selected, fresh.detach(), self.feature)
         self.valid = torch.where(cell_selected, torch.ones_like(self.valid), self.valid)
         self.age = torch.where(cell_selected, torch.zeros_like(self.age), self.age + 1.0)
@@ -277,5 +381,9 @@ class CoordinateConsistentRegionCache:
         )
         self.previous_fresh = fresh.detach().clone()
         self.previous_fresh_pose_world = ego_pose_world.detach().clone()
-        return CacheOutput(self.feature, selected, score, self.age,
-                           self.source_time, self.valid)
+        served = self.feature * (self.valid >= 0.5).to(self.feature.dtype)
+        return CacheOutput(
+            served, selected, score, self.age, self.source_time,
+            self.valid, expired, keyframe_reason is not None,
+            keyframe_reason, abrupt_ratio,
+        )

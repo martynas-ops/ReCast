@@ -15,12 +15,12 @@ icassp2027_revision/dataset_views/opv2v_internal/validate/
 icassp2027_revision/dataset_views/opv2v_internal/test/
 icassp2027_revision/dataset_views/v2xset/
 icassp2027_revision/dataset_views/spd_opencood/
-icassp2027_revision/dataset_views/v2xset/
-icassp2027_revision/dataset_views/spd_opencood/
-baselines/code/OpenCOOD/
+baselines/code/
 
 # Checkpoints and generated training/evaluation artifacts
 *.pth
+!checkpoints/
+!checkpoints/recast_pointpillar_opv2v.pth
 *.pt
 *.ckpt
 *.engine

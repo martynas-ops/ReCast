@@ -1,0 +1,38 @@
+{
+  "OpenCOOD": {
+    "url": "https://github.com/DerrickXuNu/OpenCOOD.git",
+    "commit": "31ba16025da27ffe4e336f011290dfbc66f9a1f1",
+    "path": "baselines/code/OpenCOOD",
+    "role": "ReCAST detector training and same-backbone controlled experiments"
+  },
+  "Where2comm": {
+    "url": "https://github.com/MediaBrain-SJTU/where2comm.git",
+    "commit": "d3432523973b8c11df71e8e85750b2cb6fbe9dbb",
+    "path": "baselines/code/Where2comm",
+    "role": "public-method comparison"
+  },
+  "How2comm": {
+    "url": "https://github.com/ydk122024/How2comm.git",
+    "commit": "8d357abdcb265ed4db5e4c6d9ee5400ea5799abe",
+    "path": "baselines/code/How2comm",
+    "role": "public-method comparison",
+    "patches": ["baselines/patches/how2comm_audit.patch"]
+  },
+  "CoSDH": {
+    "url": "https://github.com/Xu2729/CoSDH.git",
+    "commit": "b270b69fe133c0c1ca2044ad072cd77fc21863fb",
+    "path": "baselines/code/CoSDH",
+    "role": "public-method comparison and the fixed-scene audit",
+    "patches": [
+      "baselines/patches/cosdh_audit.patch",
+      "baselines/patches/cosdh_recast_cache.patch"
+    ]
+  },
+  "CPCoCo": {
+    "url": "https://github.com/saki-mobile/cpcoco.git",
+    "commit": "2f5e6f9e487f78d4bc6ca43da2fcfd1b24ec09ff",
+    "path": "baselines/code/CPCoCo",
+    "role": "public-method comparison",
+    "patches": ["baselines/patches/cpcoco_audit.patch"]
+  }
+}

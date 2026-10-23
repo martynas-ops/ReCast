@@ -1,0 +1,10 @@
+{
+  "frames": 71,
+  "ap50": 0.9910293825678074,
+  "ap70": 0.982006627857253,
+  "feature_bytes_per_frame": 1469220.0721830986,
+  "index_bytes_per_frame": 34413.409055897886,
+  "payload_kb_per_frame": 1468.3920715224576,
+  "full_kb_per_frame": 14784.0,
+  "payload_percent": 9.932305678588053
+}

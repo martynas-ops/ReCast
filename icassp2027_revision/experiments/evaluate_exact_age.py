@@ -80,6 +80,9 @@ def main() -> int:
     parser.add_argument("--output", default=str(
         REVISION / "experiments/learned_exact_age.json"))
     parser.add_argument("--com-range", type=float, default=70.0)
+    parser.add_argument("--max-frames", type=int, default=0)
+    parser.add_argument("--device", choices=("auto", "cpu", "cuda"),
+                        default="auto")
     args = parser.parse_args()
 
     gaps = sorted({int(x) for x in args.gaps.split(",")})
@@ -92,7 +95,11 @@ def main() -> int:
         dataset, batch_size=1, num_workers=0, shuffle=False, drop_last=False,
         collate_fn=dataset.collate_batch_test,
     )
-    model = train_utils.create_model(hypes).cuda().eval()
+    device = torch.device(
+        "cuda" if args.device == "auto" and torch.cuda.is_available()
+        else "cpu" if args.device == "auto" else args.device
+    )
+    model = train_utils.create_model(hypes).to(device).eval()
     checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     model.load_state_dict(checkpoint["model"])
 
@@ -106,12 +113,14 @@ def main() -> int:
 
     with torch.no_grad():
         for index, batch in enumerate(loader):
+            if args.max_frames and index >= args.max_frames:
+                break
             scenario, timestamp, pose = index_context(dataset, index)
             if scenario != previous_scenario:
                 histories = [deque(maxlen=kmax + 1) for _ in range(3)]
                 pose_history = deque(maxlen=kmax + 1)
                 previous_scenario = scenario
-            batch = train_utils.to_device(batch, torch.device("cuda"))
+            batch = train_utils.to_device(batch, device)
             levels = extract_levels(model, batch["ego"])
             if any(level.shape[0] < 2 for level in levels):
                 histories = [deque(maxlen=kmax + 1) for _ in range(3)]
@@ -119,7 +128,7 @@ def main() -> int:
                 continue
             current_pose = pose_to_matrix(
                 float(pose[0]), float(pose[1]), math.radians(float(pose[4])),
-                device=torch.device("cuda"),
+                device=device,
             )
             for level, values in enumerate(levels):
                 histories[level].append(values[1].detach())
@@ -154,6 +163,7 @@ def main() -> int:
         "dataset_dir": str(Path(args.dataset_dir).resolve()),
         "gaps": gaps,
         "n_common_frames": n_common,
+        "device": str(device),
         "curves": results,
         "protocol": "exact cache age k; all k evaluated on one common frame set",
     }

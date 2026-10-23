@@ -1,0 +1,8 @@
+{
+  "frames": 50,
+  "ap50": 0.23721434190466476,
+  "ap70": 0.1635573123537981,
+  "payload_percent": 20.466384291648865,
+  "threshold": 0.174,
+  "test_dir": "/workspace/icassp2027_revision/dataset_views/spd_temporal/test"
+}

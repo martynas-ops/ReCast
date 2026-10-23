@@ -29,7 +29,7 @@ fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.25))
 
 ax = axes[0]
 for method, label, color, marker in (
-    ("direct", "Direct", "#1677b8", "o"),
+    ("direct", "ReCAST", "#1677b8", "o"),
     ("periodic", "Periodic", "#d95f02", "s"),
 ):
     rows = list(budget["curves"][method].values())
@@ -63,7 +63,7 @@ ax.legend(frameon=False)
 
 fig.tight_layout(w_pad=1.3)
 out = args.output_dir
-out.mkdir(exist_ok=True)
+out.mkdir(parents=True, exist_ok=True)
 fig.savefig(out / "fig_learned_curves_side_by_side.pdf", bbox_inches="tight")
 fig.savefig(out / "fig_learned_curves_side_by_side.png", dpi=240, bbox_inches="tight")
 print(out / "fig_learned_curves_side_by_side.pdf")

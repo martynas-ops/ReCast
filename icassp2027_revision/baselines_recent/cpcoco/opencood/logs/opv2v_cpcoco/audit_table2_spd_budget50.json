@@ -1,0 +1,12 @@
+{
+  "frames": 50,
+  "ap50": 0.2920986880249607,
+  "ap70": 0.09829075487322635,
+  "test_dir": "icassp2027_revision/dataset_views/spd_temporal/test",
+  "max_cav": 2,
+  "payload_budget_kib": 7392.0,
+  "payload_kib_per_frame": 7392.0,
+  "total_payload_mib": 360.9375,
+  "full_kib_per_frame": 16896.0,
+  "protocol": "CPCoCo with inference-only Top-k energy mask before matching; no retraining"
+}

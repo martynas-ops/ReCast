@@ -1,0 +1,28 @@
+{
+  "protocol": {
+    "datasets": ["OPV2V", "V2XSet"],
+    "pilot_frames": {"OPV2V": 71, "V2XSet": 48},
+    "feature_dtype": "float16",
+    "full_reference_kb_per_frame": 35200.0,
+    "metadata": "Where2comm-compatible and CoSDH include two uint16 spatial coordinates per selected cell; How2comm includes a one-bit mask per feature value; InfoCom includes two uint16 coordinates plus a 4-bit mask value per selected cell; Direct includes two uint16 coordinates per selected spatial cell.",
+    "warning": "Where2comm is the CoSDH-codebase compatible implementation. AP rows retain the existing lightweight pilot protocols and are not a strict leaderboard."
+  },
+  "OPV2V": {
+    "Ego-only": {"ap50": 0.669974, "ap70": 0.371468, "payload_kb_per_frame": 0.0, "payload_percent": 0.0},
+    "Full Communication": {"ap50": 0.785543, "ap70": 0.482232, "payload_kb_per_frame": 35200.0, "payload_percent": 100.0, "ap50_gain_per_kb": 0.000328, "ap50_gain_per_payload_percent": 0.115569},
+    "Where2comm-compatible": {"ap50": 0.992597, "ap70": 0.987223, "payload_kb_per_frame": 10268.066, "payload_percent": 69.4539, "ap50_gain_per_kb": 0.003142, "ap50_gain_per_payload_percent": 0.4645},
+    "How2comm": {"ap50": 0.952239, "ap70": 0.846643, "payload_kb_per_frame": 7393.901, "payload_percent": 21.0054, "ap50_gain_per_kb": 0.003818, "ap50_gain_per_payload_percent": 1.3438},
+    "CoSDH": {"ap50": 0.993513, "ap70": 0.987298, "payload_kb_per_frame": 10083.512, "payload_percent": 68.2056, "ap50_gain_per_kb": 0.003209, "ap50_gain_per_payload_percent": 0.4744},
+    "InfoCom": {"ap50": 0.992529, "ap70": 0.963018, "payload_kb_per_frame": 124.750, "payload_percent": 0.3544, "ap50_gain_per_kb": 0.258561, "ap50_gain_per_payload_percent": 91.0135},
+    "Direct": {"ap50": 0.742648, "ap70": 0.451804, "payload_kb_per_frame": 3751.727, "payload_percent": 10.6583, "ap50_gain_per_kb": 0.001937, "ap50_gain_per_payload_percent": 0.6819}
+  },
+  "V2XSet": {
+    "Ego-only": {"ap50": 0.649523, "ap70": 0.393687, "payload_kb_per_frame": 0.0, "payload_percent": 0.0},
+    "Full Communication": {"ap50": 0.739441, "ap70": 0.483171, "payload_kb_per_frame": 35200.0, "payload_percent": 100.0, "ap50_gain_per_kb": 0.000255, "ap50_gain_per_payload_percent": 0.089918},
+    "Where2comm-compatible": {"ap50": 0.934366, "ap70": 0.856760, "payload_kb_per_frame": 6625.764, "payload_percent": 44.8171, "ap50_gain_per_kb": 0.004299, "ap50_gain_per_payload_percent": 0.6356},
+    "How2comm": {"ap50": 0.856666, "ap70": 0.618131, "payload_kb_per_frame": 7644.771, "payload_percent": 21.7181, "ap50_gain_per_kb": 0.002710, "ap50_gain_per_payload_percent": 0.9538},
+    "CoSDH": {"ap50": 0.936908, "ap70": 0.860651, "payload_kb_per_frame": 6440.875, "payload_percent": 43.5665, "ap50_gain_per_kb": 0.004462, "ap50_gain_per_payload_percent": 0.6596},
+    "InfoCom": {"ap50": 0.987776, "ap70": 0.952706, "payload_kb_per_frame": 124.750, "payload_percent": 0.3544, "ap50_gain_per_kb": 0.271145, "ap50_gain_per_payload_percent": 95.4429},
+    "Direct": {"ap50": 0.728089, "ap70": 0.469665, "payload_kb_per_frame": 3920.921, "payload_percent": 11.1390, "ap50_gain_per_kb": 0.002004, "ap50_gain_per_payload_percent": 0.7053}
+  }
+}

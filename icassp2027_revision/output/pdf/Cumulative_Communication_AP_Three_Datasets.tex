@@ -1,0 +1,30 @@
+\documentclass[10pt]{article}
+\usepackage[paperwidth=17.0in,paperheight=3.5in,margin=0.36in]{geometry}
+\usepackage{booktabs,array,graphicx,float,caption}
+\pagestyle{empty}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.24}
+\begin{document}
+\begin{table}[H]\centering
+\caption{Cumulative communication and AP@0.5 at five nominal budgets. Each cell is transmitted MiB / percentage saved versus sending the Full intermediate feature every frame / AP@0.5.}
+\resizebox{\textwidth}{!}{\begin{tabular}{l*{15}{c}}
+\toprule
+\textbf{Method} & \multicolumn{5}{c}{\textbf{OPV2V (71 frames)}} & \multicolumn{5}{c}{\textbf{V2XSet (48 frames)}} & \multicolumn{5}{c}{\textbf{SPD (50 frames)}} \\
+\cmidrule(lr){2-6}\cmidrule(lr){7-11}\cmidrule(l){12-16}
+ & 10\% & 20\% & 30\% & 40\% & 50\% & 10\% & 20\% & 30\% & 40\% & 50\% & 10\% & 20\% & 30\% & 40\% & 50\% \\
+\midrule
+Ego-only & 0/100\%/0.841 & 0/100\%/0.841 & 0/100\%/0.841 & 0/100\%/0.841 & 0/100\%/0.841 & 0/100\%/0.602 & 0/100\%/0.602 & 0/100\%/0.602 & 0/100\%/0.602 & 0/100\%/0.602 & 0/100\%/0.371 & 0/100\%/0.371 & 0/100\%/0.371 & 0/100\%/0.371 & 0/100\%/0.371 \\
+Full Communication & 533.9/0.0\%/0.947 & 533.9/0.0\%/0.947 & 533.9/0.0\%/0.947 & 533.9/0.0\%/0.947 & 533.9/0.0\%/0.947 & 360.9/0.0\%/0.717 & 360.9/0.0\%/0.717 & 360.9/0.0\%/0.717 & 360.9/0.0\%/0.717 & 360.9/0.0\%/0.717 & 721.9/0.0\%/0.491 & 721.9/0.0\%/0.491 & 721.9/0.0\%/0.491 & 721.9/0.0\%/0.491 & 721.9/0.0\%/0.491 \\
+Where2comm$^{*}$ & 104.9/80.4\%/0.991 & 209.8/60.7\%/0.992 & 314.7/41.1\%/0.993 & 419.6/21.4\%/0.993 & 524.5/1.7\%/0.993 & 70.9/80.4\%/0.926 & 141.8/60.7\%/0.926 & 212.7/41.1\%/0.859 & 283.6/21.4\%/0.851 & 354.6/1.7\%/0.850 & 36.9/94.9\%/0.481 & 73.9/89.8\%/0.491 & 110.8/84.7\%/0.491 & 147.7/79.5\%/0.491 & 184.7/74.4\%/0.491 \\
+How2comm$^{\dagger}$ & 234.7/56.0\%/0.947 & 452.2/15.3\%/0.949 & 732.6/-37.2\%/0.949 & 930.5/-74.3\%/0.948 & 1181.3/-121.3\%/0.945 & 135.9/62.4\%/0.839 & 283.5/21.5\%/0.864 & 469.9/-30.2\%/0.885 & 601.1/-66.5\%/0.884 & 835.7/-131.5\%/0.888 & 172.9/76.0\%/0.234 & 351.8/51.3\%/0.237 & 527.6/26.9\%/0.234 & 657.9/8.9\%/0.235 & 846.0/-17.2\%/0.233 \\
+CoSDH & 101.8/80.9\%/0.991 & 205.6/61.5\%/0.992 & 309.9/42.0\%/0.993 & 413.9/22.5\%/0.993 & 517.2/3.1\%/0.993 & 68.9/80.9\%/0.926 & 137.1/62.0\%/0.926 & 205.4/43.1\%/0.870 & 275.3/23.7\%/0.862 & 345.4/4.3\%/0.863 & 36.7/94.9\%/0.478 & 73.6/89.8\%/0.487 & 110.4/84.7\%/0.487 & 147.2/79.6\%/0.487 & 183.8/74.5\%/0.487 \\
+InfoCom & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\textbf{ReCAST} & 60.3/88.7\%/0.922 & 113.1/78.8\%/0.939 & 166.0/68.9\%/0.946 & 218.8/59.0\%/0.947 & 271.6/49.1\%/0.947 & 43.0/88.1\%/0.665 & 78.4/78.3\%/0.704 & 113.9/68.4\%/0.717 & 149.4/58.6\%/0.710 & 184.8/48.8\%/0.713 & 35.6/95.1\%/0.452 & 71.1/90.2\%/0.469 & 106.6/85.2\%/0.469 & 142.2/80.3\%/0.469 & 177.6/75.4\%/0.469 \\
+\bottomrule
+\end{tabular}}
+\vspace{4pt}
+\begin{minipage}{\textwidth}\footnotesize
+\textit{Notes.} AP is dataset-level AP@0.5 from the same measured operating point as its communication cost; it is not an average of AP@0.5 and AP@0.7. Each nominal column uses the nearest measured point within 5 payload percentage points; exact payloads and sources are in the companion JSON. Full is 7,700 KiB/frame on OPV2V and V2XSet (verified Direct PointPillar multiscale tensors) and 14,784 KiB/frame on SPD (Direct using the CoSDH backbone). Direct and CoSDH/Where2comm include indexed feature bytes. $^\dagger$How2comm is a lower-bound byte estimate from its reported communication rate against a 35,200-KiB native Full reference; mask/control overhead is excluded. InfoCom has one fixed native point outside these bins: 8.6 MiB/AP 0.993 on OPV2V and 5.8 MiB/AP 0.988 on V2XSet; SPD payload is unverified. Negative savings mean more bytes than the Full reference. Ego-only and Full are reference rows. Absolute byte differences also reflect backbone representation size. $^*$Where2comm is the CoSDH-compatible implementation.
+\end{minipage}
+\end{table}
+\end{document}

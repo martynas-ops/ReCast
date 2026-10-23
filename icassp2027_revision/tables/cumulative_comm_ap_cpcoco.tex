@@ -1,0 +1,45 @@
+\begin{table*}[t]
+\centering
+\caption{Fixed-scene communication and detection at five nominal budget targets. Each entry is cumulative transmitted MiB / saving (\%) relative to the stated Full reference / AP@0.5.}
+\label{tab:comm-ap-audit}
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\renewcommand{\arraystretch}{1.03}
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{l}{\textbf{OPV2V (Xu et al., 2022; 71 frames)}} \\
+Method & 10\% & 20\% & 30\% & 40\% & 50\% \\
+\midrule
+Full Communication (reference) & 533.9/0.0/0.947 & 533.9/0.0/0.947 & 533.9/0.0/0.947 & 533.9/0.0/0.947 & 533.9/0.0/0.947 \\
+Where2comm$^{*}$ (Hu et al., 2022) & 104.9/80.4/0.991 & 209.8/60.7/0.992 & 314.7/41.1/0.993 & 419.6/21.4/0.993 & 524.5/1.7/0.993 \\
+How2comm$^{\dagger}$ (Yang et al., 2023) & 234.7/56.0/0.947 & 452.2/15.3/0.949 & 732.6/-37.2/0.949 & 930.5/-74.3/0.948 & 1181.3/-121.3/0.945 \\
+CoSDH (Xu et al., 2025) & 101.8/80.9/0.991 & 205.6/61.5/0.992 & 309.9/42.0/0.993 & 413.9/22.5/0.993 & 517.2/3.1/0.993 \\
+CPCoCo$^{\ddagger}$ (Xu et al., 2026) & 53.4/90.0/0.987 & 106.8/80.0/0.987 & 160.2/70.0/0.987 & 213.6/60.0/0.987 & 266.9/50.0/0.987 \\
+\textbf{ReCAST (Ours)} & 60.3/88.7/0.922 & 113.1/78.8/0.939 & 166.0/68.9/0.946 & 218.8/59.0/0.947 & 271.6/49.1/0.947 \\
+\midrule
+\multicolumn{6}{l}{\textbf{V2XSet (Xu et al., 2022; 48 frames)}} \\
+Method & 10\% & 20\% & 30\% & 40\% & 50\% \\
+\midrule
+Full Communication (reference) & 360.9/0.0/0.717 & 360.9/0.0/0.717 & 360.9/0.0/0.717 & 360.9/0.0/0.717 & 360.9/0.0/0.717 \\
+Where2comm$^{*}$ (Hu et al., 2022) & 70.9/80.4/0.926 & 141.8/60.7/0.926 & 212.7/41.1/0.859 & 283.6/21.4/0.851 & 354.6/1.7/0.850 \\
+How2comm$^{\dagger}$ (Yang et al., 2023) & 135.9/62.4/0.839 & 283.5/21.5/0.864 & 469.9/-30.2/0.885 & 601.1/-66.5/0.884 & 835.7/-131.5/0.888 \\
+CoSDH (Xu et al., 2025) & 68.9/80.9/0.926 & 137.1/62.0/0.926 & 205.4/43.1/0.870 & 275.3/23.7/0.862 & 345.4/4.3/0.863 \\
+CPCoCo$^{\ddagger}$ (Xu et al., 2026) & 36.1/90.0/0.948 & 72.2/80.0/0.948 & 108.3/70.0/0.948 & 144.4/60.0/0.948 & 180.5/50.0/0.948 \\
+\textbf{ReCAST (Ours)} & 43.0/88.1/0.665 & 78.4/78.3/0.704 & 113.9/68.4/0.717 & 149.4/58.6/0.710 & 184.8/48.8/0.713 \\
+\midrule
+\multicolumn{6}{l}{\textbf{V2X-Seq-SPD (Yu et al., 2023; 50 frames)}} \\
+Method & 10\% & 20\% & 30\% & 40\% & 50\% \\
+\midrule
+Full Communication (reference) & 721.9/0.0/0.491 & 721.9/0.0/0.491 & 721.9/0.0/0.491 & 721.9/0.0/0.491 & 721.9/0.0/0.491 \\
+Where2comm$^{*}$ (Hu et al., 2022) & 36.9/94.9/0.481 & 73.9/89.8/0.491 & 110.8/84.7/0.491 & 147.7/79.5/0.491 & 184.7/74.4/0.491 \\
+How2comm$^{\dagger}$ (Yang et al., 2023) & 172.9/76.0/0.234 & 351.8/51.3/0.237 & 527.6/26.9/0.234 & 657.9/8.9/0.235 & 846.0/-17.2/0.233 \\
+CoSDH (Xu et al., 2025) & 36.7/94.9/0.478 & 73.6/89.8/0.487 & 110.4/84.7/0.487 & 147.2/79.6/0.487 & 183.8/74.5/0.487 \\
+CPCoCo$^{\ddagger}$ (Xu et al., 2026) & 72.2/90.0/0.292 & 144.4/80.0/0.292 & 216.6/70.0/0.292 & 288.7/60.0/0.292 & 360.9/50.0/0.292 \\
+\textbf{ReCAST (Ours)} & 35.6/95.1/0.452 & 71.1/90.2/0.469 & 106.6/85.2/0.469 & 142.2/80.3/0.469 & 177.6/75.4/0.469 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\begin{minipage}{.98\textwidth}\scriptsize
+\textit{Notes.} Full references are 7,700 KiB/frame on OPV2V/V2XSet and 14,784 KiB/frame on SPD. $^{\ddagger}$CPCoCo is the released OPV2V detector with an inference-only energy-ranked spatial mask before its matcher, not an author-provided budget policy; V2XSet/SPD are zero-shot. Its estimated payload counts FP16 selected BEV values and spatial IDs, but excludes matcher/control overhead and network framing, so it is a lower bound. On SPD the CPCoCo matcher rejects the roadside collaborator in this pilot; its AP is effectively Ego-only despite attempted transmissions. Direct and Where2comm/CoSDH count transmitted features and IDs. $^{\dagger}$How2comm uses a rate-derived lower bound. Different backbones limit causal attribution. $^{*}$Where2comm is the CoSDH-compatible implementation.
+\end{minipage}
+\end{table*}

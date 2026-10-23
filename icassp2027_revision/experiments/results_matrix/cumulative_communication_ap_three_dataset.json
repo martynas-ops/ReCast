@@ -1,0 +1,925 @@
+{
+  "metadata": {
+    "budgets_percent": [
+      10,
+      20,
+      30,
+      40,
+      50
+    ],
+    "frames": {
+      "OPV2V": 71,
+      "V2XSet": 48,
+      "SPD": 50
+    },
+    "full_reference_kib_per_frame": {
+      "OPV2V": 7700.0,
+      "V2XSet": 7700.0,
+      "SPD": 14784.0
+    },
+    "info_native": {
+      "OPV2V": {
+        "mib": 8.649658203125,
+        "saving_percent": 98.37987012987013,
+        "kib_per_frame": 124.75,
+        "actual_payload_percent": 1.62012987012987,
+        "source": "experiments/results_matrix/communication_efficiency_two_dataset.json",
+        "ap50": 0.992529,
+        "qualifier": "fixed native point, outside 10-50% bins"
+      },
+      "V2XSet": {
+        "mib": 5.84765625,
+        "saving_percent": 98.37987012987013,
+        "kib_per_frame": 124.75,
+        "actual_payload_percent": 1.62012987012987,
+        "source": "experiments/results_matrix/communication_efficiency_two_dataset.json",
+        "ap50": 0.987776,
+        "qualifier": "fixed native point, outside 10-50% bins"
+      }
+    },
+    "how2comm_limitation": "rate-derived feature bytes; mask/control overhead excluded"
+  },
+  "table": {
+    "Ego-only": {
+      "OPV2V": [
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8412847616132346,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8412847616132346,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8412847616132346,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8412847616132346,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8412847616132346,
+          "qualifier": "zero-communication reference"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.6017404428429369,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.6017404428429369,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.6017404428429369,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.6017404428429369,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.6017404428429369,
+          "qualifier": "zero-communication reference"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_thre_0.200000_spd_ego_for_ap_table_epoch22.json",
+          "ap50": 0.3714177553281821,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_thre_0.200000_spd_ego_for_ap_table_epoch22.json",
+          "ap50": 0.3714177553281821,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_thre_0.200000_spd_ego_for_ap_table_epoch22.json",
+          "ap50": 0.3714177553281821,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_thre_0.200000_spd_ego_for_ap_table_epoch22.json",
+          "ap50": 0.3714177553281821,
+          "qualifier": "zero-communication reference"
+        },
+        {
+          "mib": 0.0,
+          "saving_percent": 100.0,
+          "kib_per_frame": 0.0,
+          "actual_payload_percent": 0.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_thre_0.200000_spd_ego_for_ap_table_epoch22.json",
+          "ap50": 0.3714177553281821,
+          "qualifier": "zero-communication reference"
+        }
+      ]
+    },
+    "Full Communication": {
+      "OPV2V": [
+        {
+          "mib": 533.88671875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9468703257684074,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 533.88671875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9468703257684074,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 533.88671875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9468703257684074,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 533.88671875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9468703257684074,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 533.88671875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9468703257684074,
+          "qualifier": "100-percent Full reference"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 360.9375,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.7173443949942341,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 360.9375,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.7173443949942341,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 360.9375,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.7173443949942341,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 360.9375,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.7173443949942341,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 360.9375,
+          "saving_percent": 0.0,
+          "kib_per_frame": 7700.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.7173443949942341,
+          "qualifier": "100-percent Full reference"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 721.875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 14784.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b1.0000_a0.150_m1_spd_full_for_ap_mean_epoch22.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 721.875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 14784.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b1.0000_a0.150_m1_spd_full_for_ap_mean_epoch22.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 721.875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 14784.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b1.0000_a0.150_m1_spd_full_for_ap_mean_epoch22.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 721.875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 14784.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b1.0000_a0.150_m1_spd_full_for_ap_mean_epoch22.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "100-percent Full reference"
+        },
+        {
+          "mib": 721.875,
+          "saving_percent": 0.0,
+          "kib_per_frame": 14784.0,
+          "actual_payload_percent": 100.0,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b1.0000_a0.150_m1_spd_full_for_ap_mean_epoch22.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "100-percent Full reference"
+        }
+      ]
+    },
+    "Where2comm*": {
+      "OPV2V": [
+        {
+          "mib": 104.86302185058594,
+          "saving_percent": 80.35856331168831,
+          "kib_per_frame": 1512.390625,
+          "actual_payload_percent": 10.229914941829005,
+          "source": "experiments/payload_runs/where2comm_opv2v/payload_stats_kratio_0.1000_opv2v_cost_full_epoch0.json",
+          "ap50": 0.9909738435307627,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 209.7612533569336,
+          "saving_percent": 60.71053165584416,
+          "kib_per_frame": 3025.2890625,
+          "actual_payload_percent": 20.46326476258117,
+          "source": "experiments/payload_runs/where2comm_opv2v/payload_stats_kratio_0.2000_opv2v_cost_full_epoch0.json",
+          "ap50": 0.9924470399943386,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 314.65948486328125,
+          "saving_percent": 41.0625,
+          "kib_per_frame": 4538.1875,
+          "actual_payload_percent": 30.696614583333332,
+          "source": "experiments/payload_runs/where2comm_opv2v/payload_stats_kratio_0.3000_opv2v_cost_full_epoch0.json",
+          "ap50": 0.9927417271055536,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 419.5577512830496,
+          "saving_percent": 21.414461804674822,
+          "kib_per_frame": 6051.086441040039,
+          "actual_payload_percent": 40.9299678100652,
+          "source": "experiments/payload_runs/where2comm_opv2v/payload_stats_kratio_0.4000_opv2v_cost_full_epoch0.json",
+          "ap50": 0.9928827720063512,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 524.543701171875,
+          "saving_percent": 1.749999999999996,
+          "kib_per_frame": 7565.25,
+          "actual_payload_percent": 51.171875,
+          "source": "experiments/payload_runs/where2comm_opv2v/payload_stats_kratio_0.5000_opv2v_cost_full_epoch0.json",
+          "ap50": 0.9928916909097657,
+          "qualifier": "measured"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 70.893310546875,
+          "saving_percent": 80.35856331168831,
+          "kib_per_frame": 1512.390625,
+          "actual_payload_percent": 10.229914941829005,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.1000_v2xset_budget_full_epoch0.json",
+          "ap50": 0.926033936437621,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 141.8104248046875,
+          "saving_percent": 60.71053165584416,
+          "kib_per_frame": 3025.2890625,
+          "actual_payload_percent": 20.46326476258117,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.2000_v2xset_budget_full_epoch0.json",
+          "ap50": 0.9255540758049171,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 212.7275390625,
+          "saving_percent": 41.0625,
+          "kib_per_frame": 4538.1875,
+          "actual_payload_percent": 30.696614583333332,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.3000_v2xset_budget_full_epoch0.json",
+          "ap50": 0.8592246111881755,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 283.64467692375183,
+          "saving_percent": 21.414461804674822,
+          "kib_per_frame": 6051.086441040039,
+          "actual_payload_percent": 40.9299678100652,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.4000_v2xset_budget_full_epoch0.json",
+          "ap50": 0.8509538812841928,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 354.62109375,
+          "saving_percent": 1.749999999999996,
+          "kib_per_frame": 7565.25,
+          "actual_payload_percent": 51.171875,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.5000_v2xset_budget_full_epoch0.json",
+          "ap50": 0.8497062713207684,
+          "qualifier": "measured"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 36.92359924316406,
+          "saving_percent": 94.8850425290855,
+          "kib_per_frame": 756.1953125,
+          "actual_payload_percent": 10.229914941829005,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.1000_spd50_epoch0.json",
+          "ap50": 0.48116324583366993,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 73.8595962524414,
+          "saving_percent": 89.7683676187094,
+          "kib_per_frame": 1512.64453125,
+          "actual_payload_percent": 20.46326476258117,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.2000_spd50_epoch0.json",
+          "ap50": 0.4905347875852964,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 110.79559326171875,
+          "saving_percent": 84.65169270833334,
+          "kib_per_frame": 2269.09375,
+          "actual_payload_percent": 30.696614583333332,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.3000_spd50_epoch0.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 147.73160256445408,
+          "saving_percent": 79.5350160949674,
+          "kib_per_frame": 3025.5432205200195,
+          "actual_payload_percent": 40.9299678100652,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.4000_spd50_epoch0.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 184.698486328125,
+          "saving_percent": 74.4140625,
+          "kib_per_frame": 3782.625,
+          "actual_payload_percent": 51.171875,
+          "source": "experiments/payload_runs/where2comm_v2xset/payload_stats_kratio_0.5000_spd50_epoch0.json",
+          "ap50": 0.49084985922294305,
+          "qualifier": "measured"
+        }
+      ]
+    },
+    "How2comm": {
+      "OPV2V": [
+        {
+          "mib": 234.70758437499998,
+          "saving_percent": 56.03794285714285,
+          "kib_per_frame": 3385.0784,
+          "actual_payload_percent": 9.6167,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.947,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 452.24049062499995,
+          "saving_percent": 15.292800000000007,
+          "kib_per_frame": 6522.4544,
+          "actual_payload_percent": 18.5297,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9489,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 732.60240625,
+          "saving_percent": -37.220571428571404,
+          "kib_per_frame": 10565.983999999999,
+          "actual_payload_percent": 30.017,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9488,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 930.5224499999998,
+          "saving_percent": -74.29211428571428,
+          "kib_per_frame": 13420.492799999998,
+          "actual_payload_percent": 38.1264,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9476,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 1181.30155,
+          "saving_percent": -121.26445714285711,
+          "kib_per_frame": 17037.3632,
+          "actual_payload_percent": 48.4016,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.9449,
+          "qualifier": "rate-derived; mask overhead excluded"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 135.861,
+          "saving_percent": 62.35885714285714,
+          "kib_per_frame": 2898.368,
+          "actual_payload_percent": 8.234,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8386,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 283.51455,
+          "saving_percent": 21.450514285714284,
+          "kib_per_frame": 6048.3104,
+          "actual_payload_percent": 17.1827,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8635,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 469.86060000000003,
+          "saving_percent": -30.177828571428588,
+          "kib_per_frame": 10023.6928,
+          "actual_payload_percent": 28.4764,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8851,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 601.0504500000002,
+          "saving_percent": -66.52480000000003,
+          "kib_per_frame": 12822.409600000003,
+          "actual_payload_percent": 36.4273,
+          "source": "experiments/results_matrix/same_pilot_multibudget_summary.json",
+          "ap50": 0.8843,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 835.6980621814728,
+          "saving_percent": -131.53539385114397,
+          "kib_per_frame": 17828.225326538086,
+          "actual_payload_percent": 50.648367404937744,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_v2xset_budget50_full_thre_0.147000.json",
+          "ap50": 0.8884195640143997,
+          "qualifier": "rate-derived; mask overhead excluded"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 172.9405380319804,
+          "saving_percent": 76.042869190375,
+          "kib_per_frame": 3541.8222188949585,
+          "actual_payload_percent": 10.061994940042496,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_spd50_thre_0.200000.json",
+          "ap50": 0.23354633373769365,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 351.76598001271486,
+          "saving_percent": 51.27051359131223,
+          "kib_per_frame": 7204.1672706604,
+          "actual_payload_percent": 20.466384291648865,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_spd50_thre_0.174000.json",
+          "ap50": 0.23721434190466476,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 527.6105785742402,
+          "saving_percent": 26.911088682356333,
+          "kib_per_frame": 10805.46464920044,
+          "actual_payload_percent": 30.69734275341034,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_spd50_thre_0.162000.json",
+          "ap50": 0.23447965428379922,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 657.908171415329,
+          "saving_percent": 8.861205691383,
+          "kib_per_frame": 13473.959350585938,
+          "actual_payload_percent": 38.27829360961914,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_spd50_thre_0.155000.json",
+          "ap50": 0.23454049792376155,
+          "qualifier": "rate-derived; mask overhead excluded"
+        },
+        {
+          "mib": 845.9529001265764,
+          "saving_percent": -17.18828053701491,
+          "kib_per_frame": 17325.115394592285,
+          "actual_payload_percent": 49.219077825546265,
+          "source": "experiments/payload_runs/how2comm_v2xset/budget_stats_spd50_thre_0.149000.json",
+          "ap50": 0.23324712653991445,
+          "qualifier": "rate-derived; mask overhead excluded"
+        }
+      ]
+    },
+    "CoSDH": {
+      "OPV2V": [
+        {
+          "mib": 101.81234089657666,
+          "saving_percent": 80.92997309711095,
+          "kib_per_frame": 1468.3920715224576,
+          "actual_payload_percent": 9.932305678588053,
+          "source": "experiments/payload_runs/cosdh_opv2v/payload_stats_kratio_0.1000_opv2v_cost_full_epoch22.json",
+          "ap50": 0.9910293825678074,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 205.5741411074996,
+          "saving_percent": 61.494801446116774,
+          "kib_per_frame": 2964.9002886490084,
+          "actual_payload_percent": 20.054790913480844,
+          "source": "experiments/payload_runs/cosdh_opv2v/payload_stats_kratio_0.2000_opv2v_cost_full_epoch22.json",
+          "ap50": 0.9924658480415824,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 309.91378658264875,
+          "saving_percent": 41.95139611109706,
+          "kib_per_frame": 4469.742499445526,
+          "actual_payload_percent": 30.23364785880361,
+          "source": "experiments/payload_runs/cosdh_opv2v/payload_stats_kratio_0.3000_opv2v_cost_full_epoch22.json",
+          "ap50": 0.9927938408719864,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 413.8747521638871,
+          "saving_percent": 22.478919660541365,
+          "kib_per_frame": 5969.123186138315,
+          "actual_payload_percent": 40.37556267680137,
+          "source": "experiments/payload_runs/cosdh_opv2v/payload_stats_kratio_0.4000_opv2v_cost_full_epoch22.json",
+          "ap50": 0.9929137900371441,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 517.182541385293,
+          "saving_percent": 3.1287868339966884,
+          "kib_per_frame": 7459.083413782255,
+          "actual_payload_percent": 50.45375685729339,
+          "source": "experiments/payload_runs/cosdh_opv2v/payload_stats_kratio_0.5000_opv2v_cost_full_epoch22.json",
+          "ap50": 0.9929075472419937,
+          "qualifier": "measured"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 68.87960508093238,
+          "saving_percent": 80.91647305117024,
+          "kib_per_frame": 1469.4315750598907,
+          "actual_payload_percent": 9.939336952515495,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.1000_v2xset_budget_full_epoch22.json",
+          "ap50": 0.9261574462990502,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 137.0969479382038,
+          "saving_percent": 62.01643000846302,
+          "kib_per_frame": 2924.734889348348,
+          "actual_payload_percent": 19.783109370592182,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.2000_v2xset_budget_full_epoch22.json",
+          "ap50": 0.9258097727437478,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 205.44564349949357,
+          "saving_percent": 43.07999487459918,
+          "kib_per_frame": 4382.840394655863,
+          "actual_payload_percent": 29.645836002812928,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.3000_v2xset_budget_full_epoch22.json",
+          "ap50": 0.870297247395877,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 275.25546558201313,
+          "saving_percent": 23.738745466455235,
+          "kib_per_frame": 5872.116599082947,
+          "actual_payload_percent": 39.7194034028879,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.4000_v2xset_budget_full_epoch22.json",
+          "ap50": 0.8623408130132107,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 345.3963136970997,
+          "saving_percent": 4.305783218119563,
+          "kib_per_frame": 7368.454692204794,
+          "actual_payload_percent": 49.840737907229396,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.5000_v2xset_budget_full_epoch22.json",
+          "ap50": 0.8625366859879368,
+          "qualifier": "measured"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 36.731320042163134,
+          "saving_percent": 94.91167860887784,
+          "kib_per_frame": 752.257434463501,
+          "actual_payload_percent": 10.17664278224433,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.1000_spd_budget_full_epoch22.json",
+          "ap50": 0.4784019583737383,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 73.56720044463873,
+          "saving_percent": 89.80887266567775,
+          "kib_per_frame": 1506.656265106201,
+          "actual_payload_percent": 20.382254668644496,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.2000_spd_budget_full_epoch22.json",
+          "ap50": 0.4866635804819591,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 110.37322764471173,
+          "saving_percent": 84.71020223103561,
+          "kib_per_frame": 2260.4437021636963,
+          "actual_payload_percent": 30.579595537928792,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.3000_spd_budget_full_epoch22.json",
+          "ap50": 0.4870353353848908,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 147.240601323545,
+          "saving_percent": 79.60303358288554,
+          "kib_per_frame": 3015.4875151062015,
+          "actual_payload_percent": 40.79393283422892,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.4000_spd_budget_full_epoch22.json",
+          "ap50": 0.4870353353848908,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 183.77830123901367,
+          "saving_percent": 74.54153402749594,
+          "kib_per_frame": 3763.779609375,
+          "actual_payload_percent": 50.916931945008116,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_kratio_0.5000_spd_budget_full_epoch22.json",
+          "ap50": 0.4870353353848908,
+          "qualifier": "measured"
+        }
+      ]
+    },
+    "InfoCom": {
+      "OPV2V": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "V2XSet": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "SPD": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "Direct (Ours)": {
+      "OPV2V": [
+        {
+          "mib": 60.332489013671875,
+          "saving_percent": 88.6993838028169,
+          "kib_per_frame": 870.1474471830986,
+          "actual_payload_percent": 11.300616197183098,
+          "source": "experiments/results_matrix/direct_opv2v_same_pilot_budget_curve.json",
+          "ap50": 0.9218183969299708,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 113.14544677734375,
+          "saving_percent": 78.80721830985915,
+          "kib_per_frame": 1631.844190140845,
+          "actual_payload_percent": 21.192781690140844,
+          "source": "experiments/results_matrix/direct_opv2v_same_pilot_budget_curve.json",
+          "ap50": 0.938714010969333,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 165.9584045410156,
+          "saving_percent": 68.91505281690141,
+          "kib_per_frame": 2393.5409330985913,
+          "actual_payload_percent": 31.08494718309859,
+          "source": "experiments/results_matrix/direct_opv2v_same_pilot_budget_curve.json",
+          "ap50": 0.9459486960814892,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 218.77136230468753,
+          "saving_percent": 59.02288732394365,
+          "kib_per_frame": 3155.2376760563384,
+          "actual_payload_percent": 40.97711267605634,
+          "source": "experiments/results_matrix/direct_opv2v_same_pilot_budget_curve.json",
+          "ap50": 0.9469199793172508,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 271.5843200683594,
+          "saving_percent": 49.13072183098593,
+          "kib_per_frame": 3916.934419014084,
+          "actual_payload_percent": 50.86927816901408,
+          "source": "experiments/results_matrix/direct_opv2v_same_pilot_budget_curve.json",
+          "ap50": 0.9468526838186673,
+          "qualifier": "float16 features plus selected-region IDs"
+        }
+      ],
+      "V2XSet": [
+        {
+          "mib": 42.97966003417969,
+          "saving_percent": 88.09221540178571,
+          "kib_per_frame": 916.8994140625,
+          "actual_payload_percent": 11.907784598214286,
+          "source": "experiments/results_matrix/direct_v2xset_same_pilot_budget_curve.json",
+          "ap50": 0.6645930993971493,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 78.43978881835938,
+          "saving_percent": 78.26776413690476,
+          "kib_per_frame": 1673.3821614583335,
+          "actual_payload_percent": 21.73223586309524,
+          "source": "experiments/results_matrix/direct_v2xset_same_pilot_budget_curve.json",
+          "ap50": 0.7039639761242893,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 113.89991760253906,
+          "saving_percent": 68.44331287202381,
+          "kib_per_frame": 2429.8649088541665,
+          "actual_payload_percent": 31.55668712797619,
+          "source": "experiments/results_matrix/direct_v2xset_same_pilot_budget_curve.json",
+          "ap50": 0.7174291648258997,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 149.36004638671875,
+          "saving_percent": 58.61886160714286,
+          "kib_per_frame": 3186.34765625,
+          "actual_payload_percent": 41.381138392857146,
+          "source": "experiments/results_matrix/direct_v2xset_same_pilot_budget_curve.json",
+          "ap50": 0.709607763510355,
+          "qualifier": "float16 features plus selected-region IDs"
+        },
+        {
+          "mib": 184.82017517089844,
+          "saving_percent": 48.794410342261905,
+          "kib_per_frame": 3942.830403645833,
+          "actual_payload_percent": 51.205589657738095,
+          "source": "experiments/results_matrix/direct_v2xset_same_pilot_budget_curve.json",
+          "ap50": 0.7125647458946592,
+          "qualifier": "float16 features plus selected-region IDs"
+        }
+      ],
+      "SPD": [
+        {
+          "mib": 35.64188766479492,
+          "saving_percent": 95.06259564816693,
+          "kib_per_frame": 729.9458593749999,
+          "actual_payload_percent": 9.874808703666126,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b0.0800_a0.150_m1_spd_test_semres_m1_epoch22.json",
+          "ap50": 0.4521859177311356,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 71.09858703613281,
+          "saving_percent": 90.15084508590367,
+          "kib_per_frame": 1456.0990625,
+          "actual_payload_percent": 19.69830982819264,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b0.1800_a0.150_m1_spd_test_budget_0.18_epoch22.json",
+          "ap50": 0.46933593551622055,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 106.55528640747069,
+          "saving_percent": 85.23909452364042,
+          "kib_per_frame": 2182.252265625,
+          "actual_payload_percent": 29.521810952719154,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b0.2800_a0.150_m1_spd_test_budget_0.28_epoch22.json",
+          "ap50": 0.4686481720419431,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 142.18002700805664,
+          "saving_percent": 80.30406552269345,
+          "kib_per_frame": 2911.8469531250003,
+          "actual_payload_percent": 39.391868954613095,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b0.3800_a0.150_m1_spd_test_budget_0.38_epoch22.json",
+          "ap50": 0.46897768531818423,
+          "qualifier": "measured"
+        },
+        {
+          "mib": 177.63672637939453,
+          "saving_percent": 75.3923149604302,
+          "kib_per_frame": 3638.00015625,
+          "actual_payload_percent": 49.21537007913961,
+          "source": "experiments/payload_runs/cosdh_v2xset/payload_stats_direct_semantic_residual_b0.4800_a0.150_m1_spd_test_budget_0.48_epoch22.json",
+          "ap50": 0.46897219990950284,
+          "qualifier": "measured"
+        }
+      ]
+    }
+  }
+}
