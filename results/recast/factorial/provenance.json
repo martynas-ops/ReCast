@@ -1,0 +1,15 @@
+{
+  "000": "opv2v_factor_000.json",
+  "100": "opv2v_factor_100.json",
+  "010": "opv2v_factor_010.json",
+  "001": "opv2v_factor_001.json",
+  "110": "opv2v_factor_110.json",
+  "101": "../controlled_policies/opv2v_tx_delta_10pct.json",
+  "011": "../../opv2v_component_curves.json:curves.direct_nowarp.0.1",
+  "111": "../../opv2v_policy_results.json:direct",
+  "definition": {
+    "A": "coordinate-consistent temporal transport",
+    "B": "receiver-cache residual instead of sender-side temporal difference",
+    "C": "Top-B selection instead of a validation-calibrated threshold"
+  }
+}

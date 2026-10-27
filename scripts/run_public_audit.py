@@ -32,7 +32,9 @@ def main() -> int:
     parser.add_argument("--max-frames", type=int, required=True)
     parser.add_argument("--tag", default="audit")
     parser.add_argument("--budgets", default="0.1,0.2,0.3,0.4,0.5",
-                        help="fractions for CoSDH/ReCAST; KiB/frame for CPCoCo")
+                        help="fractions of the stated Full reference")
+    parser.add_argument("--full-kib-per-frame", type=float, default=7700.0,
+                        help="reference Full payload used to convert CPCoCo fractions")
     parser.add_argument("--thresholds", default="0.19,0.174,0.162,0.155,0.149",
                         help="How2comm thresholds, one per operating point")
     parser.add_argument("--epoch", type=int, default=-1)
@@ -82,7 +84,8 @@ def main() -> int:
             )
     else:
         repository = ROOT / "baselines" / "code" / "CPCoCo"
-        for budget_kib in csv_values(args.budgets):
+        for budget in csv_values(args.budgets):
+            budget_kib = budget * args.full_kib_per_frame
             execute(
                 repository,
                 "opencood/tools/inference.py",
@@ -94,7 +97,7 @@ def main() -> int:
                 "--com_range", str(args.com_range),
                 "--no_vis",
                 "--payload_budget_kib", str(budget_kib),
-                "--result_tag", f"{args.tag}_{budget_kib:g}",
+                "--result_tag", f"{args.tag}_{100 * budget:g}pct",
             )
     return 0
 

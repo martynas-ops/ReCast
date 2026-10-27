@@ -1,0 +1,43 @@
+{
+  "combo": "100",
+  "transport": true,
+  "selection_mode": "tx_delta",
+  "target_payload_fraction": 0.1,
+  "frames": 276,
+  "candidates": [
+    {
+      "threshold": 0.16,
+      "payload_fraction": 0.11677371541501977
+    },
+    {
+      "threshold": 0.17,
+      "payload_fraction": 0.10962685864859778
+    },
+    {
+      "threshold": 0.18,
+      "payload_fraction": 0.10273785996612084
+    },
+    {
+      "threshold": 0.185,
+      "payload_fraction": 0.09886057782796913
+    },
+    {
+      "threshold": 0.19,
+      "payload_fraction": 0.09535526068134764
+    },
+    {
+      "threshold": 0.195,
+      "payload_fraction": 0.09195440429136081
+    },
+    {
+      "threshold": 0.2,
+      "payload_fraction": 0.08868435911914173
+    }
+  ],
+  "selected": {
+    "threshold": 0.185,
+    "payload_fraction": 0.09886057782796913
+  },
+  "dataset_dir": "${REPO_ROOT}/icassp2027_revision/dataset_views/opv2v_internal/validate",
+  "selection_protocol": "validation-only; cache trajectory per threshold"
+}

@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import statistics
 import subprocess
 import sys
 from pathlib import Path
@@ -73,6 +75,36 @@ def main() -> int:
             "--output", str(output / f"{label}_budget_curve.json"),
         )
 
+    random_dir = output / "opv2v_random_b"
+    random_dir.mkdir(parents=True, exist_ok=True)
+    random_rows = []
+    for seed in range(2027, 2037):
+        result_path = random_dir / f"seed_{seed}.json"
+        run(
+            EXP / "evaluate_learned_direct.py",
+            "--config", str(EXP / "point_pillar_internal.yaml"),
+            "--dataset-dir", str(args.opv2v.resolve()),
+            "--dataset-label", "opv2v",
+            "--modes", "random_b",
+            "--budget", "0.10",
+            "--seed", str(seed),
+            "--output", str(result_path),
+            *common,
+        )
+        random_rows.append(json.loads(result_path.read_text(encoding="utf-8"))["random_b"])
+    random_summary = {"n": len(random_rows)}
+    for key in ("ap_50", "ap_70", "feature_value_fraction_realized"):
+        values = [row[key] for row in random_rows]
+        random_summary[key] = {
+            "mean": statistics.mean(values),
+            "stdev": statistics.stdev(values),
+            "min": min(values),
+            "max": max(values),
+        }
+    (random_dir / "summary.json").write_text(
+        json.dumps(random_summary, indent=2), encoding="utf-8"
+    )
+
     run(
         EXP / "evaluate_exact_age.py",
         "--config", str(EXP / "point_pillar_internal.yaml"),
@@ -83,6 +115,12 @@ def main() -> int:
         "--max-frames", str(args.max_frames),
         "--device", args.device,
         "--output", str(output / "opv2v_exact_age.json"),
+    )
+    run(
+        EXP / "evaluate_motion_prediction.py",
+        "--dataset-root", str(args.opv2v.resolve()),
+        "--exact-age-json", str(output / "opv2v_exact_age.json"),
+        "--output", str(output / "opv2v_motion_correlation.json"),
     )
     run(
         ROOT / "scripts" / "run_factorial_ablation.py",

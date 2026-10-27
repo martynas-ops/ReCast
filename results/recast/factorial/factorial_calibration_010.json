@@ -1,0 +1,67 @@
+{
+  "combo": "010",
+  "transport": false,
+  "selection_mode": "direct",
+  "target_payload_fraction": 0.1,
+  "frames": 276,
+  "candidates": [
+    {
+      "threshold": 0.1,
+      "payload_fraction": 0.16739836250705817
+    },
+    {
+      "threshold": 0.15,
+      "payload_fraction": 0.1383298042537173
+    },
+    {
+      "threshold": 0.2,
+      "payload_fraction": 0.11571593261810653
+    },
+    {
+      "threshold": 0.25,
+      "payload_fraction": 0.0968452380952381
+    },
+    {
+      "threshold": 0.3,
+      "payload_fraction": 0.08044184076792772
+    },
+    {
+      "threshold": 0.4,
+      "payload_fraction": 0.05597261434217956
+    },
+    {
+      "threshold": 0.6,
+      "payload_fraction": 0.028480848861283645
+    },
+    {
+      "threshold": 0.8,
+      "payload_fraction": 0.01676665725578769
+    },
+    {
+      "threshold": 1.0,
+      "payload_fraction": 0.011727366836062488
+    },
+    {
+      "threshold": 1.5,
+      "payload_fraction": 0.008594955768868812
+    },
+    {
+      "threshold": 2.0,
+      "payload_fraction": 0.007857142857142858
+    },
+    {
+      "threshold": 3.0,
+      "payload_fraction": 0.007511763598720121
+    },
+    {
+      "threshold": 5.0,
+      "payload_fraction": 0.007313664596273292
+    }
+  ],
+  "selected": {
+    "threshold": 0.25,
+    "payload_fraction": 0.0968452380952381
+  },
+  "dataset_dir": "${REPO_ROOT}/icassp2027_revision/dataset_views/opv2v_internal/validate",
+  "selection_protocol": "validation-only; cache trajectory per threshold"
+}

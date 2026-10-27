@@ -1,0 +1,47 @@
+{
+  "cosdh_opv2v_71f": {
+    "ap_50": 0.9935131808843128,
+    "ap_70": 0.9872976403527438,
+    "source": "results/public/fixed_scene/cosdh_opv2v_71f.yaml"
+  },
+  "cosdh_spd_50f": {
+    "ap_50": 0.3722033131897502,
+    "ap_70": 0.34728998551353546,
+    "source": "results/public/fixed_scene/cosdh_spd_50f.yaml"
+  },
+  "cosdh_v2xset_48f": {
+    "ap_50": 0.9369083673557549,
+    "ap_70": 0.8606514634012388,
+    "source": "results/public/fixed_scene/cosdh_v2xset_48f.yaml"
+  },
+  "how2comm_opv2v_71f": {
+    "ap_50": 0.9522390997698014,
+    "ap_70": 0.8466427042746512,
+    "source": "results/public/fixed_scene/how2comm_opv2v_71f.yaml"
+  },
+  "how2comm_spd_50f": {
+    "ap_50": 0.2307720839900276,
+    "ap_70": 0.16008905568909265,
+    "source": "results/public/fixed_scene/how2comm_spd_50f.yaml"
+  },
+  "how2comm_v2xset_48f": {
+    "ap_50": 0.8566658826100083,
+    "ap_70": 0.6181308999703421,
+    "source": "results/public/fixed_scene/how2comm_v2xset_48f.yaml"
+  },
+  "where2comm_opv2v_71f": {
+    "ap_50": 0.9925967605214734,
+    "ap_70": 0.9872234196810602,
+    "source": "results/public/fixed_scene/where2comm_opv2v_71f.yaml"
+  },
+  "where2comm_spd_50f": {
+    "ap_50": 0.3722033131897502,
+    "ap_70": 0.34728998551353546,
+    "source": "results/public/fixed_scene/where2comm_spd_50f.yaml"
+  },
+  "where2comm_v2xset_48f": {
+    "ap_50": 0.9343659907780025,
+    "ap_70": 0.8567603053309959,
+    "source": "results/public/fixed_scene/where2comm_v2xset_48f.yaml"
+  }
+}

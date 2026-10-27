@@ -7,8 +7,11 @@ ReCAST aligns historical bird's-eye-view features to the current ego frame, main
 ## Setup
 
 Create a CUDA environment following the [OpenCOOD installation guide](https://opencood.readthedocs.io/), then fetch the exact OpenCOOD revision:
+The released runs used Python 3.12.3, PyTorch 2.7.1 with CUDA 11.8, and
+spconv 2.3.8; the remaining tested package versions are pinned below.
 
 ```bash
+python3 -m pip install -r requirements-recast.txt
 python3 scripts/setup_public_baselines.py --method OpenCOOD
 python3 scripts/setup_public_baselines.py --method OpenCOOD --verify-only
 ```
@@ -31,6 +34,13 @@ Place V2XSet test scenes in OpenCOOD format. Convert V2X-Seq SPD with:
 python3 icassp2027_revision/experiments/adapt_spd_opencood.py \
   --spd-root /path/to/V2X-Seq-SPD \
   --output icassp2027_revision/dataset_views/spd_opencood
+```
+
+The fixed-scene audit views are specified in `protocols/audit_views.json` and
+can be created without copying data:
+
+```bash
+python3 scripts/prepare_audit_views.py --help
 ```
 
 ## Run
@@ -70,12 +80,15 @@ The fixed-scene audit source JSON files are included. Regenerate the communicati
 ```bash
 python3 icassp2027_revision/experiments/build_cumulative_communication_table.py
 python3 icassp2027_revision/experiments/build_cpcoco_table2.py
+python3 scripts/build_controlled_tables.py
+python3 scripts/summarize_public_results.py
 ```
 
 Run release checks before evaluation:
 
 ```bash
 python3 scripts/verify_release.py
+sha256sum -c results/SHA256SUMS
 ```
 
 <!--

@@ -1,0 +1,39 @@
+{
+  "factor_000": {
+    "ap_30": 0.6180277027050811,
+    "ap_50": 0.597870485513995,
+    "ap_70": 0.37310445401637027,
+    "frames": 469,
+    "budget_requested": 0.1,
+    "feature_value_fraction_realized": 0.10770428931409742,
+    "per_scenario": {
+      "0": {
+        "ap_30": 0.5329790261529069,
+        "ap_50": 0.5029398119170713,
+        "ap_70": 0.2292826769794366
+      },
+      "1": {
+        "ap_30": 0.8452771829063586,
+        "ap_50": 0.8301727327874084,
+        "ap_70": 0.6168436220583082
+      },
+      "2": {
+        "ap_30": 0.6552175876809054,
+        "ap_50": 0.6460491845171529,
+        "ap_70": 0.4880048694163447
+      }
+    }
+  },
+  "protocol": {
+    "dataset_label": "opv2v_internal_test",
+    "dataset_dir": "${REPO_ROOT}/icassp2027_revision/dataset_views/opv2v_internal/test",
+    "training_split": "8 OPV2V train / 2 OPV2V validation scenarios",
+    "scope": "scene-disjoint internal feasibility on OPV2V; cross-dataset zero-shot when dataset_label is not opv2v_internal_test",
+    "collaborators": 1,
+    "global_sort_detections": true,
+    "feature_region_m": 3.2,
+    "input_seed": 2027,
+    "selection_seed": 2027,
+    "threshold": 0.2
+  }
+}

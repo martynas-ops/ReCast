@@ -1,0 +1,19 @@
+{
+  "opv2v_fixed_scene": {
+    "source_split": "OPV2V/test",
+    "scenes": ["2021_08_22_21_41_24"],
+    "max_frames": 71
+  },
+  "v2xset_fixed_scene": {
+    "source_split": "V2XSet/validate",
+    "scenes": ["2021_08_23_13_17_21"],
+    "max_frames": 48
+  },
+  "spd_temporal": {
+    "sequence": "0058",
+    "train_frames": 150,
+    "validation_frames": 49,
+    "test_frames": 50,
+    "total_frames": 249
+  }
+}
